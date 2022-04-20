@@ -1,7 +1,14 @@
-import type { NextPage } from 'next';
+import type { NextPage, GetStaticProps } from 'next';
 import Head from 'next/head';
+import { LaptopCard } from '../components/LaptopCard';
+import { IProduct } from '../interfaces/storeDataProps';
+import { server } from '../utils/isDev';
 
-const Home: NextPage = () => {
+interface Props {
+  products: IProduct[];
+}
+
+const Home: NextPage<Props> = ({ products }) => {
   return (
     <div>
       <Head>
@@ -12,9 +19,23 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Laptops Económicas RD</h1>
+        {products.map((product, idx) => (
+          <LaptopCard key={idx} {...product} />
+        ))}
       </main>
     </div>
   );
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const res = await fetch(`${server}/api/laptops`);
+  const { products }: Props = await res.json();
+
+  return {
+    props: {
+      products,
+    },
+  };
+};
