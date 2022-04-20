@@ -47,7 +47,7 @@ export const getBiosComputerData = async ({ page, vendor }: getDataProps) => {
 
     const price: string =
       (await product.$eval(
-        '.price-add-to-cart .woocommerce-Price-currencySymbol',
+        '.price-add-to-cart .woocommerce-Price-amount.amount bdi',
         (el: HTMLElement) => el.textContent
       )) ?? 'Price not available';
 
